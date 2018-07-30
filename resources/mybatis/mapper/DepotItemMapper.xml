@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.java.dao.DepotItemMapper">
+	<resultMap id="BaseResultMap" type="com.java.bean.DepotItem">
+		<result column="depotno" jdbcType="INTEGER" property="depotno" />
+		<result column="depot_item" jdbcType="INTEGER"
+			property="depotItem" />
+		<result column="prod_id" jdbcType="INTEGER" property="prodId" />
+		<result column="quantity" jdbcType="INTEGER"
+			property="quantity" />
+	</resultMap>
+	<resultMap id="BaseResultMap1" type="com.java.bean.DepotItem">
+		<result column="depotno" jdbcType="INTEGER" property="depotno" />
+		<result column="depot_item" jdbcType="INTEGER"
+			property="depotItem" />
+		<result column="prod_id" jdbcType="INTEGER" property="prodId" />
+		<result column="prod_name" jdbcType="VARCHAR"
+			property="prodName" />
+		<result column="prod_price" jdbcType="DECIMAL"
+			property="prodPrice" />
+		<result column="quantity" jdbcType="INTEGER"
+			property="quantity" />
+	</resultMap>
+	<resultMap extends="BaseResultMap1" id="ResultMapWithBLOBs"
+		type="com.java.bean.DepotItem">
+		<result column="prod_desc" jdbcType="LONGVARCHAR"
+			property="prodDesc" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value"
+										item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" prefixOverrides="and" suffix=")">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value} and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach close=")" collection="criterion.value"
+										item="listItem" open="(" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		depotno, depot_item, prod_id, quantity
+	</sql>
+	<select id="selectByExample"
+		parameterType="com.java.bean.DepotItemExample"
+		resultMap="BaseResultMap">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from depot_items
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+		<if test="limit != null">
+			<if test="offset != null">
+				limit ${offset}, ${limit}
+			</if>
+			<if test="offset == null">
+				limit ${limit}
+			</if>
+		</if>
+	</select>
+	<select id="selectProductsByDepotno"
+		parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+		SELECT product.*, depot_items.quantity FROM depot_items, product
+		WHERE depot_items.depotno = #{depotno} AND depot_items.prod_id =
+		product.prod_id
+	</select>
+	<select id="selectProductsPageByDepotno"
+		parameterType="com.java.bean.DepotItemExample"
+		resultMap="ResultMapWithBLOBs">
+		SELECT product.*, depot_items.quantity FROM depot_items, product
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if> 
+		AND depot_items.prod_id = product.prod_id
+		<if test="limit != null">
+			<if test="offset != null">
+				limit ${offset}, ${limit}
+			</if>
+			<if test="offset == null">
+				limit ${limit}
+			</if>
+		</if>
+	</select>
+	<delete id="deleteByExample"
+		parameterType="com.java.bean.DepotItemExample">
+		delete from depot_items
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.java.bean.DepotItem">
+		insert into depot_items (depotno, depot_item, prod_id,
+		quantity)
+		values (#{depotno,jdbcType=INTEGER}, #{depotItem,jdbcType=INTEGER},
+		#{prodId,jdbcType=INTEGER},
+		#{quantity,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective"
+		parameterType="com.java.bean.DepotItem">
+		insert into depot_items
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="depotno != null">
+				depotno,
+			</if>
+			<if test="depotItem != null">
+				depot_item,
+			</if>
+			<if test="prodId != null">
+				prod_id,
+			</if>
+			<if test="quantity != null">
+				quantity,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="depotno != null">
+				#{depotno,jdbcType=INTEGER},
+			</if>
+			<if test="depotItem != null">
+				#{depotItem,jdbcType=INTEGER},
+			</if>
+			<if test="prodId != null">
+				#{prodId,jdbcType=INTEGER},
+			</if>
+			<if test="quantity != null">
+				#{quantity,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample"
+		parameterType="com.java.bean.DepotItemExample"
+		resultType="java.lang.Long">
+		select count(*) from depot_items
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+
+	<update id="updateByExampleSelective" parameterType="map">
+		update depot_items
+		<set>
+			<if test="record.depotno != null">
+				depotno = #{record.depotno,jdbcType=INTEGER},
+			</if>
+			<if test="record.depotItem != null">
+				depot_item = #{record.depotItem,jdbcType=INTEGER},
+			</if>
+			<if test="record.prodId != null">
+				prod_id = #{record.prodId,jdbcType=INTEGER},
+			</if>
+			<if test="record.quantity != null">
+				quantity = #{record.quantity,jdbcType=INTEGER},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update depot_items
+		set depotno = #{record.depotno,jdbcType=INTEGER},
+		depot_item = #{record.depotItem,jdbcType=INTEGER},
+		prod_id = #{record.prodId,jdbcType=INTEGER},
+		quantity = #{record.quantity,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+ 		http://www.springframework.org/schema/beans/spring-beans.xsd
+ 		http://www.springframework.org/schema/context
+ 		http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- Spring 整合 DAO 层（Mybatis）整体就两块： -->
+
+	<!--1. 让 Spring 创建 DataSource -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">	<!-- Spring内置的DataSrouce。以前是DBCP2，未来是Hikari -->
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost/worksheet" />
+		<property name="username" value="root" />
+		<property name="password" value="123456" />
+	</bean>
+
+	<!--2. 让 Spring 创建 DAO（Mapper） -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" /> 								<!-- 指明数据库连接池，即指明了要操作的数据库 -->
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml" />	<!-- 指明 1 配置所在地 -->
+		<property name="mapperLocations" value="classpath:mybatis/mapper/*.xml" /> 		<!--指明 N 配置所在地 -->
+	</bean>
+
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+		<property name="basePackage" value="com.java.dao" /> 						<!-- 指明扫描的包 -->
+	</bean>
+
+</beans>
+
+
+

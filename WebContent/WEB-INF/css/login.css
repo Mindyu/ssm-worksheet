@@ -1,0 +1,49 @@
+@charset "UTF-8";
+
+body{
+	height: 100%;
+	background-image: url(../images/background.jpg);
+	background-repeat: no-repeat;
+	background-size: 100% 100%;	
+}
+
+#container{
+	width: 400px;
+	height: 40%;
+	padding-top: 200px;
+	margin: 0px auto;
+	align-content: center;
+}
+
+#header{
+	width: auto;
+	margin : 0 auto;
+	text-align: center;
+}
+
+h1{
+	padding-left: 70px;
+	margin-bottom: 30px;
+	height: 35px;
+	width: 250px;
+}
+
+input{
+	height: 35px;
+	width: 250px;
+	border: 1px solid;
+	border-radius: 10px;
+	font-size: 14px;  
+}
+
+input::-webkit-input-placeholder {
+	color: #aab2bd; 		/* placeholder颜色  */
+    font-size: 14px;   		/* placeholder字体大小  */
+    text-align: center;		/* placeholder位置  */
+}
+
+#content{
+	width: auto;
+	margin : 0 auto;
+	text-align: center;
+}
